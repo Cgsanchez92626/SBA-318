@@ -7,6 +7,14 @@ const flash = require('express-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+// Data Imports
+const agents = require('./data/agents')
+const contacts = require('./data/contacts')
+const properties = require('./data/properties')
+const agentRoutes = require('./routes/agentRoutes')
+const contactRoutes = require('./routes/contactRoutes')
+const propertyRoutes = require('./routes/propertyRoutes')
+
 // Create express app
 const app = express();
 
@@ -15,6 +23,7 @@ app.set('view engine', 'ejs');
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({extended: true}));
 
 // Session middleware
 app.use(session({
@@ -23,7 +32,8 @@ app.use(session({
     saveUninitialized: true // Set to true to save uninitialized sessions
 }));
 
-// Express flash middleware
+// Express flash middleware - used for error handling, 
+// specifically for displaying flash messages. 
 app.use(flash());
 
 // Passport middleware
@@ -36,6 +46,11 @@ const users = [
     { id: 2, username: 'user2', password: 'password2' },
     { id: 3, username: 'user3', password: 'password3' }
 ];
+
+// Mock Customer Relationship Management Database/Middleware
+app.use('/api/agents',agentRoutes)
+app.use('/api/contacts',contactRoutes)
+app.use('/api/properties',propertyRoutes)
 
 // Configure passport-local strategy
 passport.use(new LocalStrategy(
@@ -105,6 +120,12 @@ app.get('/logout', (req, res) => {
         res.redirect('/login'); // Redirect after logout
     });
 });
+
+// Middleware
+app.use((req, res)=>{
+    res.status(404)
+    res.json({error: "Resourse not found"})
+})
 
 // Start server
 const PORT = process.env.PORT || 3000;
