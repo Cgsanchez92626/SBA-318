@@ -102,7 +102,17 @@ app.post('/login',
 
 // Dashboard route
 app.get('/dashboard', isAuthenticated, (req, res) => {
-    res.render('dashboard', { username: req.user.username });
+     // Fetch mock data from databases
+     const agentsData = require('./data/agents');
+     const contactsData = require('./data/contacts');
+     const propertiesData = require('./data/properties');
+
+     res.render('dashboard', { 
+         username: req.user.username,
+         agents: agentsData,
+         contacts: contactsData,
+         properties: propertiesData
+    });
 });
 
 // Login page route

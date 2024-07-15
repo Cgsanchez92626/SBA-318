@@ -1,12 +1,183 @@
+<!-- dashboard.ejs -->
 <html>
 <head>
     <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .dashboard-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto; /* Add horizontal scroll if necessary */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            text-align: left;
+            /* table-layout: fixed; Ensures columns have equal width */
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word; /* Wrap long words to next line */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        form label, form input, form button {
+            display: block;
+            margin-bottom: 10px;
+        }
+        form input[type="text"], form input[type="email"] {
+            width: calc(100% - 22px); 
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <p>Welcome <%= username %> to your dashboard!</p>
-    <a href="/logout">Logout</a>
-    <br>
-    <a href="/">Go to Home Page</a>
+    <div class="dashboard-container">
+        <h1>Dashboard</h1>
+        <p>Welcome <%= username %> to your dashboard!</p>
+        <a href="/logout">Logout</a>
+        <br>
+        <br>
+        
+        <!-- Display Agents -->
+        <div class="table-container">
+            <h2>Agents</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% agents.forEach(agent => { %>
+                        <tr>
+                            <td><%= agent.firstname %></td>
+                            <td><%= agent.lastname %></td>
+                            <td><%= agent.email %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Display Contacts -->
+        <div class="table-container">
+            <h2>Contacts</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Contact Type</th>
+                        <th>Phone</th>
+                        <th>Last Contact Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% contacts.forEach(contact => { %>
+                        <tr>
+                            <td><%= contact.firstname %></td>
+                            <td><%= contact.lastname %></td>
+                            <td><%= contact.email %></td>
+                            <td><%= contact.contact_type %></td>
+                            <td><%= contact.phone %></td>
+                            <td><%= contact.last_contact_dt %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Display Properties -->
+        <div class="table-container">
+            <h2>Properties</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zipcode</th>
+                        <th>County</th>
+                        <th>Parcel Number</th>
+                        <th>Year Built</th>
+                        <th>Property Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% properties.forEach(property => { %>
+                        <tr>
+                            <td><%= property.address %></td>
+                            <td><%= property.city %></td>
+                            <td><%= property.state %></td>
+                            <td><%= property.zipcode %></td>
+                            <td><%= property.county %></td>
+                            <td><%= property.parcelNumber %></td>
+                            <td><%= property.yearBuilt %></td>
+                            <td><%= property.propertyType %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Example Form to Add New Agent -->
+        <h2>Add New Agent</h2>
+        <form action="/api/agents" method="POST">
+            <label for="firstname">First Name:</label>
+            <input type="text" id="firstname" name="firstname" required>
+            <br>
+            <label for="lastname">Last Name:</label>
+            <input type="text" id="lastname" name="lastname" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br>
+            <button type="submit">Add Agent</button>
+        </form>
+
+        <br>
+        <a href="/">Go to Home Page</a>
+    </div>
 </body>
 </html>
