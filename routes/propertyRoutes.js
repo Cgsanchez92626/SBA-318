@@ -3,10 +3,20 @@ const router = express.Router()
 
 const properties = require('../data/properties')
 
-// URI Route for PROPERTIES
-router.get('/', (req, res)=>{
-    res.json(properties)
-})
+// URI Route for PROPERTIES and 
+// GET Route for filtering properties by zipcode
+router.get('/', (req, res) => {
+    const { zipcode } = req.query;
+
+    if (zipcode) {
+        const searchZipcode = String(zipcode);
+        const filteredProperties = properties.filter(property => property.zipcode === searchZipcode);
+        res.json(filteredProperties);
+    } else {
+        res.json(properties);
+    }
+});
+
 // Create Route  - Post to create new property
 router.post('/', (req, res)=>{
     if (req.body.address && req.body.city && req.body.state && req.body.zipcode) {
